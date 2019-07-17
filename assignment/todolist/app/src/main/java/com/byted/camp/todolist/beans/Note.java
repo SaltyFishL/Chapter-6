@@ -1,5 +1,8 @@
 package com.byted.camp.todolist.beans;
 
+
+import com.byted.camp.todolist.R;
+
 import java.util.Date;
 
 /**
@@ -13,8 +16,10 @@ public class Note {
     private Date date;
     private State state;
     private String content;
-
     private int priority;
+    public static final int HIGH_PRIORITY = 1;
+    public static final int NORMAL_PRIORITY = 2;
+    public static final int LOW_PRIORITY = 3;
 
     public Note(long id) {
         this.id = id;
@@ -50,5 +55,23 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public static int getPriorityFromId(int id) {
+        int priority = LOW_PRIORITY;
+        switch (id) {
+            case R.id.bt_high_priority:
+                priority = Note.HIGH_PRIORITY;
+                break;
+            case R.id.bt_normal_priority:
+                priority = Note.NORMAL_PRIORITY;
+                break;
+            case R.id.bt_low_priority:
+                priority = Note.LOW_PRIORITY;
+                break;
+            default:
+                break;
+        }
+        return priority;
     }
 }

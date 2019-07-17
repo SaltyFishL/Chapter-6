@@ -108,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_ADD
                 && resultCode == Activity.RESULT_OK) {
-            int selectedBtnId = data.getIntExtra(NoteActivity.EXTRA_PRIORITY_LEVEL, 0);
-
             notesAdapter.refresh(loadNotesFromDatabase());
         }
     }
@@ -142,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                     null,
                     null,
                     null,
-                    null
+                    TodoContract.TodoNotes.COLUMN_PRIORITY + " ASC"
             );
 
             while (cursor.moveToNext()) {

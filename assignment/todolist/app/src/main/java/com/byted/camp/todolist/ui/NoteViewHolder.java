@@ -73,13 +73,13 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         }
 
         switch (note.getPriority()) {
-            case R.id.bt_high_priority:
+            case Note.HIGH_PRIORITY:
                 contentText.setBackgroundColor(Color.RED);
                 break;
-            case R.id.bt_normal_priority:
+            case Note.NORMAL_PRIORITY:
                 contentText.setBackgroundColor(Color.YELLOW);
                 break;
-            case R.id.bt_low_priority:
+            case Note.LOW_PRIORITY:
                 contentText.setBackgroundColor(Color.WHITE);
                 break;
             default:

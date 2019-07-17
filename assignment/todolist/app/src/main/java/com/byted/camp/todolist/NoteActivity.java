@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.byted.camp.todolist.beans.Note;
 import com.byted.camp.todolist.db.TodoContract;
 import com.byted.camp.todolist.db.TodoDbHelper;
 
@@ -61,9 +62,10 @@ public class NoteActivity extends AppCompatActivity {
                 if (succeed) {
                     Toast.makeText(NoteActivity.this,
                             "Note added", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_PRIORITY_LEVEL, priorityRadioGroup.getCheckedRadioButtonId());
-                    setResult(Activity.RESULT_OK, intent);
+//                    Intent intent = new Intent();
+//                    intent.putExtra(EXTRA_PRIORITY_LEVEL, priorityRadioGroup.getCheckedRadioButtonId());
+//                    setResult(Activity.RESULT_OK, intent);
+                    setResult(Activity.RESULT_OK);
                 } else {
                     Toast.makeText(NoteActivity.this,
                             "Error", Toast.LENGTH_SHORT).show();
@@ -88,7 +90,9 @@ public class NoteActivity extends AppCompatActivity {
         values.put(TodoContract.TodoNotes.COLUMN_DATE, System.currentTimeMillis());
         values.put(TodoContract.TodoNotes.COLUMN_STATE, false);
         values.put(TodoContract.TodoNotes.COLUMN_CONTENT, content);
-        values.put(TodoContract.TodoNotes.COLUMN_PRIORITY, priorityRadioGroup.getCheckedRadioButtonId());
+        int priority;
+        priority = Note.getPriorityFromId(priorityRadioGroup.getCheckedRadioButtonId());
+        values.put(TodoContract.TodoNotes.COLUMN_PRIORITY, priority);
 
         long newRowId = db.insert(TodoContract.TodoNotes.TABLE_NAME, null, values);
         if (newRowId == -1) {
