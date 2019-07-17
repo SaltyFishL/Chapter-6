@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="12dp"
     tools:context=".NoteActivity">
@@ -15,6 +15,31 @@
         android:gravity="start|top"
         android:padding="4dp"
         android:textColor="#1e1e1e" />
+
+    <RadioGroup
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/bt_priority_group" >
+        <RadioButton
+            android:id="@+id/bt_high_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/high_priority" />
+
+        <RadioButton
+            android:id="@+id/bt_normal_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/normal_priority" />
+
+        <RadioButton
+            android:id="@+id/bt_low_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/low_priority" />
+    </RadioGroup>
+
+
 
     <Button
         android:id="@+id/btn_add"

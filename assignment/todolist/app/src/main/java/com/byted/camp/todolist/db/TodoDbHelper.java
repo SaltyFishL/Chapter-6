@@ -13,9 +13,9 @@ import static com.byted.camp.todolist.db.TodoContract.SQL_CREATE_NOTES;
  */
 public class TodoDbHelper extends SQLiteOpenHelper {
 
-    // TODO 定义数据库名、版本；创建数据库 待更新priority
+    // TODO 定义数据库名、版本；创建数据库
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "TodoList.db";
 
 
@@ -30,7 +30,21 @@ public class TodoDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //TODO 待更新priority 记得改onCreate
+        for (int i = oldVersion; i < newVersion; i++) {
+            switch (i) {
+                case 1:
+                    try {
+                        db.execSQL("ALTER TABLE " + TodoContract.TodoNotes.TABLE_NAME +
+                                " ADD " + TodoContract.TodoNotes.COLUMN_PRIORITY + " INTEGER");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
 }

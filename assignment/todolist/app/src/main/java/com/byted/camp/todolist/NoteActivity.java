@@ -3,6 +3,7 @@ package com.byted.camp.todolist;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.byted.camp.todolist.db.TodoContract;
@@ -22,6 +25,8 @@ public class NoteActivity extends AppCompatActivity {
 
     private EditText editText;
     private Button addBtn;
+    private RadioGroup priorityRadioGroup;
+    public static final String EXTRA_PRIORITY_LEVEL = "priority";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,9 @@ public class NoteActivity extends AppCompatActivity {
             inputManager.showSoftInput(editText, 0);
         }
 
+        priorityRadioGroup = findViewById(R.id.bt_priority_group);
+        priorityRadioGroup.check(R.id.bt_low_priority);
+
         addBtn = findViewById(R.id.btn_add);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +61,9 @@ public class NoteActivity extends AppCompatActivity {
                 if (succeed) {
                     Toast.makeText(NoteActivity.this,
                             "Note added", Toast.LENGTH_SHORT).show();
-                    setResult(Activity.RESULT_OK);
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_PRIORITY_LEVEL, priorityRadioGroup.getCheckedRadioButtonId());
+                    setResult(Activity.RESULT_OK, intent);
                 } else {
                     Toast.makeText(NoteActivity.this,
                             "Error", Toast.LENGTH_SHORT).show();
@@ -61,6 +71,7 @@ public class NoteActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     @Override
@@ -69,7 +80,7 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private boolean saveNote2Database(String content) {
-        // TODO 插入一条新数据，返回是否插入成功 待更新priority
+        // TODO 插入一条新数据，返回是否插入成功
         TodoDbHelper mDbHelper = new TodoDbHelper(NoteActivity.this);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -77,6 +88,7 @@ public class NoteActivity extends AppCompatActivity {
         values.put(TodoContract.TodoNotes.COLUMN_DATE, System.currentTimeMillis());
         values.put(TodoContract.TodoNotes.COLUMN_STATE, false);
         values.put(TodoContract.TodoNotes.COLUMN_CONTENT, content);
+        values.put(TodoContract.TodoNotes.COLUMN_PRIORITY, priorityRadioGroup.getCheckedRadioButtonId());
 
         long newRowId = db.insert(TodoContract.TodoNotes.TABLE_NAME, null, values);
         if (newRowId == -1) {

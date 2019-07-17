@@ -108,12 +108,14 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_ADD
                 && resultCode == Activity.RESULT_OK) {
+            int selectedBtnId = data.getIntExtra(NoteActivity.EXTRA_PRIORITY_LEVEL, 0);
+
             notesAdapter.refresh(loadNotesFromDatabase());
         }
     }
 
     private List<Note> loadNotesFromDatabase() {
-        // TODO 从数据库中查询数据，并转换成 JavaBeans 待更新priority
+        // TODO 从数据库中查询数据，并转换成 JavaBeans
         TodoDbHelper mDbHelper = new TodoDbHelper(MainActivity.this);
 
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -129,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 TodoContract.TodoNotes._ID,
                 TodoContract.TodoNotes.COLUMN_DATE,
                 TodoContract.TodoNotes.COLUMN_STATE,
-                TodoContract.TodoNotes.COLUMN_CONTENT
+                TodoContract.TodoNotes.COLUMN_CONTENT,
+                TodoContract.TodoNotes.COLUMN_PRIORITY
         };
         try {
             cursor = db.query(
@@ -147,11 +150,13 @@ public class MainActivity extends AppCompatActivity {
                 long dataMs = cursor.getLong(cursor.getColumnIndex(TodoContract.TodoNotes.COLUMN_DATE));
                 int intState = cursor.getInt(cursor.getColumnIndex(TodoContract.TodoNotes.COLUMN_STATE));
                 int id = cursor.getInt(cursor.getColumnIndex(TodoContract.TodoNotes._ID));
+                int priority = cursor.getInt(cursor.getColumnIndex(TodoContract.TodoNotes.COLUMN_PRIORITY));
 
                 Note note = new Note(id);
                 note.setContent(content);
                 note.setDate(new Date(dataMs));
                 note.setState(State.from(intState));
+                note.setPriority(priority);
 
                 result.add(note);
             }
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateNode(Note note) {
-        // TODO 更新数据 待更新priority
+        // TODO 更新数据
         TodoDbHelper dbHelper = new TodoDbHelper(MainActivity.this);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -193,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(TodoContract.TodoNotes.COLUMN_CONTENT, note.getContent());
         values.put(TodoContract.TodoNotes.COLUMN_DATE, note.getDate().getTime());
         values.put(TodoContract.TodoNotes.COLUMN_STATE, note.getState().intValue);
+        values.put(TodoContract.TodoNotes.COLUMN_PRIORITY, note.getPriority());
 
         String selection = TodoContract.TodoNotes._ID + " = ?";
         String selectionArgs[] = {
